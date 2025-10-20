@@ -78,9 +78,37 @@ namespace ManageEventBackend.Infrastructures.Repositories
             }
         }
 
-        public Task<Response> ForgotPassword(LoginDto loginDto)
+        public async Task<Response> ForgotPassword(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var existing = await context.Users
+                    .FirstOrDefaultAsync(u => (u.Username == loginDto.Username || u.Email == loginDto.Username) && !u.IsDelete);
+                if (existing == null)
+                {
+                    return new Response
+                    {
+                        StatusCode = 404,
+                        Message = "User not found"
+                    };
+                }
+
+                existing.Password = BCrypt.Net.BCrypt.HashPassword(loginDto.Password);
+                existing.UpdatedAt = DateTime.UtcNow;
+
+                context.Users.Update(existing);
+                await context.SaveChangesAsync();
+                return new Response
+                {
+                    StatusCode = 200,
+                    Message = "Password reset successfully"
+                };
+            }
+            catch (Exception err)
+            {
+
+                throw new BadHttpRequestException("An occurred error while change user's password.", 500, err);
+            }
         }
 
         public IQueryable<UserResponse> GetAllUser()
@@ -126,15 +154,24 @@ namespace ManageEventBackend.Infrastructures.Repositories
         {
             try
             {
-                var user = await VerifyUser(loginDto);
+                var user = await context.Users.Where(u => (u.Username == loginDto.Username || u.Email == loginDto.Username)
+                        && !u.IsDelete)
+                    .FirstOrDefaultAsync();
+
                 if (user == null)
-                {
+                    return new Response
+                    {
+                        StatusCode = 404,
+                        Message = "Account does not exist."
+                    };
+
+                bool isValidPassword = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+                if (!isValidPassword)
                     return new Response
                     {
                         StatusCode = 401,
-                        Message = "Username or password is incorrect."
+                        Message = "Invalid credentials."
                     };
-                }
 
                 var token = tokenService.GetToken(user);
                 return new Response
@@ -200,29 +237,6 @@ namespace ManageEventBackend.Infrastructures.Repositories
             {
 
                 throw new BadHttpRequestException("An occurred error while update user.", 500, err);
-            }
-        }
-
-        private async Task<User?> VerifyUser(LoginDto login)
-        {
-            try
-            {
-                var user = await context.Users.Where(u => (u.Username == login.Username || u.Email == login.Username)
-                        && !u.IsDelete)
-                    .FirstOrDefaultAsync();
-
-                if (user == null)
-                    throw new BadHttpRequestException("User not found", 404);
-
-                bool isValidPassword = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
-                if (!isValidPassword)
-                    throw new BadHttpRequestException("Username or password is incorrect.", 401);
-
-                return user;
-            }
-            catch (Exception err)
-            {
-                throw new BadHttpRequestException("An occurred error while verify user.", 500, err);
             }
         }
     }

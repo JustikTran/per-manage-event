@@ -1,4 +1,5 @@
 using ManageEventBackend.Applications.Responses;
+using ManageEventBackend.Applications.Services;
 using ManageEventBackend.Domains.Interfaces;
 using ManageEventBackend.Infrastructures.Data;
 using ManageEventBackend.Infrastructures.Repositories;
@@ -34,6 +35,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();

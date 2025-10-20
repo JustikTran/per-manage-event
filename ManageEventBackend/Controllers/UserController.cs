@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 namespace ManageEventBackend.Controllers
 {
     [Route("api/user")]
-    [ODataRouteComponent("api/user")]
+    [ODataRouteComponent("user")]
     [ApiController]
     [Authorize]
     public class UserController : ODataController

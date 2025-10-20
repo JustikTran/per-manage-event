@@ -2,6 +2,7 @@
 using ManageEventBackend.Applications.DTOs.User;
 using ManageEventBackend.Applications.Responses;
 using ManageEventBackend.Domains.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
@@ -12,6 +13,7 @@ namespace ManageEventBackend.Controllers
     [Route("api/user")]
     [ODataRouteComponent("api/user")]
     [ApiController]
+    [Authorize]
     public class UserController : ODataController
     {
         private readonly IUserRepository userRepository;
@@ -28,7 +30,7 @@ namespace ManageEventBackend.Controllers
             return Ok(listUsers.AsQueryable());
         }
 
-        [HttpGet("id={id:alpha}")]
+        [HttpGet("id={id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
             if (!Guid.TryParse(id, out Guid userId))
@@ -48,7 +50,7 @@ namespace ManageEventBackend.Controllers
         }
 
 
-        [HttpDelete("id={id:guid}")]
+        [HttpDelete("id={id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var response = await userRepository.DeleteUser(Guid.Parse(id));

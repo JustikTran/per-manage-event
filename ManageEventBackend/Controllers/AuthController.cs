@@ -1,6 +1,7 @@
 ﻿using ManageEventBackend.Applications.DTOs.Auth;
 using ManageEventBackend.Applications.DTOs.User;
 using ManageEventBackend.Domains.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManageEventBackend.Controllers
@@ -16,6 +17,7 @@ namespace ManageEventBackend.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var response = await this.authService.Login(loginDto);
@@ -23,6 +25,7 @@ namespace ManageEventBackend.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] CreateUserDto userDto)
         {
             var response = await this.authService.Register(userDto);
@@ -30,6 +33,7 @@ namespace ManageEventBackend.Controllers
         }
 
         [HttpPost("forgot-password")]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] LoginDto loginDto)
         {
             var response = await this.authService.ForgotPassword(loginDto);

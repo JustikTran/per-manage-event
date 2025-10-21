@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ManageEventBackend.Controllers
 {
@@ -23,6 +24,7 @@ namespace ManageEventBackend.Controllers
 
         [HttpGet]
         [EnableQuery]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<EventProcessResponse>> GetAllProcesses()
         {
             var processes = repo.GetAllProcesses();

@@ -22,6 +22,7 @@ namespace ManageEventBackend.Controllers
 
         [HttpGet]
         [EnableQuery]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<EventResponse>> GetAllEvents()
         {
             var events = eventRepository.GetAllEvent();

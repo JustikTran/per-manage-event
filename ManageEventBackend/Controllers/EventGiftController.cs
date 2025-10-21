@@ -23,6 +23,7 @@ namespace ManageEventBackend.Controllers
 
         [HttpGet]
         [EnableQuery]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<EventGiftResponse>> GetAllGifts()
         {
             var gifts = eventGiftRepository.GetAllGifts();

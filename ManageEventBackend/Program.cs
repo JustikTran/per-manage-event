@@ -136,6 +136,15 @@ if (app.Environment.IsDevelopment())
         c.DefaultModelsExpandDepth(-1);
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
     });
+
+    using (var scrope = app.Services.CreateScope())
+    {
+        var dbContext = scrope.ServiceProvider.GetRequiredService<AppDbContext>();
+        //dbContext.Database.EnsureCreated();
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.GetMigrations();
+        dbContext.Database.Migrate();
+    }
 }
 
 //using (var scrope = app.Services.CreateScope())

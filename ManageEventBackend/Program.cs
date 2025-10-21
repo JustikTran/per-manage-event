@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(
 var odataBuilder = new ODataConventionModelBuilder();
 odataBuilder.EntitySet<UserResponse>("user");
 odataBuilder.EntitySet<EventResponse>("event");
+odataBuilder.EntitySet<EventMemberResponse>("participant");
 
 builder.Services.AddControllers()
     .AddOData(options => options
@@ -75,6 +76,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventMemberRepository, EventMemberRepository>();
 
 
 // Confiure cors

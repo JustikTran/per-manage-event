@@ -1,6 +1,7 @@
 ﻿using ManageEventBackend.Applications.DTOs.Event;
 using ManageEventBackend.Applications.Responses;
 using ManageEventBackend.Domains.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
@@ -28,6 +29,7 @@ namespace ManageEventBackend.Controllers
         }
 
         [HttpGet("id={id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
             if (!Guid.TryParse(id, out Guid eventId))

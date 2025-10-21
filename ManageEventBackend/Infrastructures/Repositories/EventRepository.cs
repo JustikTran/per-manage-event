@@ -31,7 +31,7 @@ namespace ManageEventBackend.Infrastructures.Repositories
                 {
                     StatusCode = 201,
                     Message = "Event created successfully.",
-                    Data = newEvent
+                    Data = EventMapper.Instance.ToResponse(newEvent)
                 };
             }
             catch (Exception err)

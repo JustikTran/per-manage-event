@@ -23,6 +23,7 @@ var odataBuilder = new ODataConventionModelBuilder();
 odataBuilder.EntitySet<UserResponse>("user");
 odataBuilder.EntitySet<EventResponse>("event");
 odataBuilder.EntitySet<EventMemberResponse>("participant");
+odataBuilder.EntitySet<EventProcessResponse>("process");
 
 builder.Services.AddControllers()
     .AddOData(options => options
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventMemberRepository, EventMemberRepository>();
+builder.Services.AddScoped<IEventProcessRepository, EventProcessRepository>();
 
 
 // Confiure cors

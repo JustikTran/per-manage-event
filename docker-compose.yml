@@ -1,0 +1,10 @@
+services:
+  manageeventbackend:
+    image: ${DOCKER_REGISTRY-}manageeventbackend
+    container_name: event-manageevent-backend
+    ports:
+        - "8000:8081"
+    build:
+      context: .
+      dockerfile: ManageEventBackend/Dockerfile
+    restart: always

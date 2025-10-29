@@ -28,7 +28,7 @@ namespace ManageEventBackend.Domains.Entities
         public string Name { get; set; } = default!;
 
         [Column("description", TypeName = "text")]
-        public string Description { get; set; } = default!;
+        public string? Description { get; set; }
 
         [Required]
         [Column("status", TypeName = "varchar(20)")]
@@ -37,6 +37,10 @@ namespace ManageEventBackend.Domains.Entities
         [Required]
         [Column("start_date", TypeName = "timestamptz")]
         public DateTime StartDate { get; set; }
+
+        [Required]
+        [Column("location", TypeName = "varchar(255)")]
+        public string Location { get; set; } = default!;
 
         [Required]
         [Column("end_date", TypeName = "timestamptz")]

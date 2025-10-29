@@ -41,6 +41,38 @@ namespace ManageEventBackend.Infrastructures.Repositories
             }
         }
 
+        public async Task<Response> AddParticipants(List<CreateEventMemberDto> memberDtos)
+        {
+            try
+            {
+                List<EventMember> eventMembers = new();
+                foreach (var item in eventMembers)
+                {
+                    var temp = new EventMember
+                    {
+                        EventId = item.EventId,
+                        Name = item.Name,
+                        Nickname = item.Nickname!,
+                        Email = item.Email!,
+                        Phone = item.Phone!
+                    };
+                    eventMembers.Add(temp);
+                }
+
+                context.EventMembers.AddRange(eventMembers);
+                await context.SaveChangesAsync();
+                return new Response
+                {
+                    StatusCode = 201,
+                    Message = "List members added successfully."
+                };
+            }
+            catch (Exception err)
+            {
+                throw new BadHttpRequestException("An occurred error while add list member of event.", 500, err);
+            }
+        }
+
         public async Task<Response> DeleteParticipant(Guid id)
         {
             try

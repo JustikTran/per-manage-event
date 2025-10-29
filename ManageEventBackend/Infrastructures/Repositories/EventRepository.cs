@@ -22,6 +22,7 @@ namespace ManageEventBackend.Infrastructures.Repositories
                     AuthorId = Guid.Parse(eventDto.AuthorId),
                     Name = eventDto.Name,
                     Status = eventDto.Status,
+                    Location = eventDto.Location,
                     StartDate = eventDto.StartDate
                 };
 

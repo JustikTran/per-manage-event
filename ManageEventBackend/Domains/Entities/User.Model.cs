@@ -46,7 +46,7 @@ namespace ManageEventBackend.Domains.Entities
         public string Avatar { get; set; } = default!;
 
         [Column("refresh_token", TypeName = "varchar(255)")]
-        public string RefeshToken { get; set; } = default!;
+        public string RefreshToken { get; set; } = default!;
 
         public bool IsDelete { get; set; }
 

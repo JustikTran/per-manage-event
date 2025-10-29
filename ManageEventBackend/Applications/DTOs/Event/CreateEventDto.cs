@@ -1,4 +1,5 @@
-﻿using ManageEventBackend.Domains.Validator;
+﻿using ManageEventBackend.Applications.DTOs.EventMember;
+using ManageEventBackend.Domains.Validator;
 using System.ComponentModel.DataAnnotations;
 
 namespace ManageEventBackend.Applications.DTOs.Event
@@ -22,5 +23,10 @@ namespace ManageEventBackend.Applications.DTOs.Event
         [IsValidStart]
         [Required]
         public DateTime StartDate { get; set; }
+
+        [Required]
+        public string Location { get; set; } = string.Empty;
+
+        public List<CreateEventMemberDto>? Members { get; set; }
     }
 }

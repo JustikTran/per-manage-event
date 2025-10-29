@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+using System.Security.Claims;
 
 namespace ManageEventBackend.Controllers
 {
@@ -30,6 +31,32 @@ namespace ManageEventBackend.Controllers
             return Ok(listUsers.AsQueryable());
         }
 
+        [HttpGet("token")]
+        public async Task<IActionResult> GetUserByToken()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out Guid parsedUserId))
+            {
+                return StatusCode(401, new
+                {
+                    StatusCode = 401,
+                    Message = "Invalid or missing user token."
+                });
+            }
+
+            if (!Guid.TryParse(userId, out Guid id))
+            {
+                return BadRequest(new
+                {
+                    StatusCode = 400,
+                    Error = "Invalid user ID format."
+                });
+            }
+
+            var response = await userRepository.GetUserById(id);
+            return StatusCode(response.StatusCode, response);
+        }
+
         [HttpGet("id={id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
         {
@@ -43,7 +70,7 @@ namespace ManageEventBackend.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser( [FromBody] UpdateUserDto userDto)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto userDto)
         {
             var response = await userRepository.UpdateUser(userDto);
             return NoContent();

@@ -5,6 +5,7 @@ using ManageEventBackend.Infrastructures.Data;
 using ManageEventBackend.Infrastructures.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
@@ -41,6 +42,7 @@ builder.Services.AddControllers()
     {
         opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -137,14 +139,16 @@ if (app.Environment.IsDevelopment())
         c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
     });
 
-    using (var scrope = app.Services.CreateScope())
-    {
-        var dbContext = scrope.ServiceProvider.GetRequiredService<AppDbContext>();
-        //dbContext.Database.EnsureCreated();
-        dbContext.Database.EnsureDeleted();
-        dbContext.Database.GetMigrations();
-        dbContext.Database.Migrate();
-    }
+    app.UseODataRouteDebug();
+
+
+    //using (var scrope = app.Services.CreateScope())
+    //{
+    //    var dbContext = scrope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //    //dbContext.Database.EnsureCreated();
+    //    dbContext.Database.GetMigrations();
+    //    dbContext.Database.Migrate();
+    //}
 }
 
 //using (var scrope = app.Services.CreateScope())
@@ -156,8 +160,6 @@ if (app.Environment.IsDevelopment())
 //}
 
 app.UseHttpsRedirection();
-
-app.UseODataRouteDebug();
 
 app.UseCors("AllowAll");
 

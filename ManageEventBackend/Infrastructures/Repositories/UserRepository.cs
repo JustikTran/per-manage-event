@@ -33,7 +33,7 @@ namespace ManageEventBackend.Infrastructures.Repositories
                     LastName = createUserDTO.LastName,
                     Role = createUserDTO.Role,
                     IsDelete = false,
-                    RefeshToken = string.Empty,
+                    RefreshToken = string.Empty,
                 };
 
                 context.Users.Add(newUser);
@@ -154,7 +154,9 @@ namespace ManageEventBackend.Infrastructures.Repositories
         {
             try
             {
-                var user = await context.Users.Where(u => (u.Username == loginDto.Username || u.Email == loginDto.Username)
+                string username = loginDto.Username.ToLower();
+                var user = await context.Users.Where(u => (u.Username.ToLower() == username
+                || u.Email.ToLower() == username)
                         && !u.IsDelete)
                     .FirstOrDefaultAsync();
 

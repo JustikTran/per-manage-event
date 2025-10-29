@@ -5,7 +5,6 @@ using ManageEventBackend.Infrastructures.Data;
 using ManageEventBackend.Infrastructures.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
-using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
@@ -95,6 +94,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FlexibleOrigin", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(origin =>
+            {
+                return origin.Contains("veima.")
+                    || origin.StartsWith("https://viema");
+            })
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 // Config JWT Authentication
 var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]!);
 builder.Services.AddAuthentication(options =>
@@ -162,6 +177,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+app.UseCors("FlexibleOrigin");
 
 app.UseAuthentication();
 

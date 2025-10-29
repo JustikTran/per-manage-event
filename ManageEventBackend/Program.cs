@@ -101,8 +101,8 @@ builder.Services.AddCors(options =>
         policy
             .SetIsOriginAllowed(origin =>
             {
-                return origin.Contains("veima.")
-                    || origin.StartsWith("https://viema");
+                return origin.Contains("https://viema.onrender.com")
+                    || origin.StartsWith("https://viema.onrender.com");
             })
             .AllowAnyHeader()
             .AllowAnyMethod()

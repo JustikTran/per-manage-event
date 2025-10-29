@@ -99,11 +99,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FlexibleOrigin", policy =>
     {
         policy
-            .SetIsOriginAllowed(origin =>
-            {
-                return origin.Contains("https://viema.onrender.com")
-                    || origin.StartsWith("https://viema.onrender.com");
-            })
+            .WithOrigins("https://viema.onrender.com",
+            "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

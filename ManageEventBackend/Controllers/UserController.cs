@@ -31,7 +31,7 @@ namespace ManageEventBackend.Controllers
             return Ok(listUsers.AsQueryable());
         }
 
-        [HttpGet("token")]
+        [HttpPost("token")]
         public async Task<IActionResult> GetUserByToken()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
